@@ -1,34 +1,49 @@
-var get_actualAge = function (birth) {
-    
-    let birthday = new Date(birth)
-    let date_now = new Date()
-
-    //data aniv
-    let ano = birthday.getFullYear()
-    let mes = birthday.getMonth() + 1
-    let dia = birthday.getUTCDate()
+function get_actualAge(birthday) {
+    let now = new Date();
 
     //data atual
-    let ano_now = date_now.getFullYear()
-    let mes_now = date_now.getMonth() + 1
-    let dia_now = date_now.getUTCDate()
+    let ano_now = now.getYear();
+    let mes_now = now.getMonth();
+    let dia_now = now.getDate();
 
-    let idade = ano_now - ano
-    let dias = dia_now
-    let meses
-    
-    if ((mes <= mes_now) && (dia <= dia_now)) {
-        meses = mes_now - mes
+    let birth_date = new Date(birthday['ano'],
+        birthday['mes'] - 1,
+        birthday['dia']
+    );
+
+    //data aniv
+    let ano_aniv = birth_date.getYear();
+    let mes_aniv = birth_date.getMonth();
+    let dia_aniv = birth_date.getDate();
+
+    let ano_idade = ano_now - ano_aniv;
+    let mes_idade
+    let dia_idade
+
+    if (mes_now >= mes_aniv) {
+        mes_idade = mes_now - mes_aniv;
+
     } else {
-        let incremento = 12 - mes
-        meses = incremento + mes_now
-        idade--
+        ano_idade--;
+        mes_idade = 12 + mes_now - mes_aniv;
     }
-    
-    return {
-        idade: idade, 
-        meses: meses, 
-        dias, dias
-    }
-}
 
+    if (dia_now >= dia_aniv) {
+        dia_idade = dia_now - dia_aniv;
+
+    } else {
+        mes_idade--;
+        dia_idade = 31 + dia_now - dia_aniv;
+
+        if (mes_idade < 0) {
+            mes_idade = 11;
+            ano_idade--;
+        }
+    }
+
+    return {
+        years: ano_idade,
+        months: mes_idade,
+        days: dia_idade
+    };
+}
